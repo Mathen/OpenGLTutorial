@@ -2,8 +2,7 @@
 #version 330 core
 
 layout(location = 0) in  vec4 position;
-layout(location = 1) in  vec3 vertexColor;
-                     out vec3 fragmentColor;
+                     out vec4 fragmentColor;
 
 uniform mat4 MVP1;
 uniform mat4 MVP2;
@@ -15,7 +14,7 @@ void main()
     else
         gl_Position = MVP2 * position;
     
-    fragmentColor = vertexColor;
+    fragmentColor = (position + 1) / 2.0f;
 };
 
 #shader fragment

@@ -5,9 +5,30 @@
 #include "glm/ext.hpp"
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <sstream>
+
+#define ASSERT(x) if (!(x)) __debugbreak();
+#define GLCall(x) GLClearError();\
+    x;\
+    ASSERT(GLLogCall())
+
+static void GLClearError()
+{
+    while (glGetError() != GL_NO_ERROR);
+}
+
+static bool GLLogCall()
+{
+    if (GLenum error = glGetError() != GL_NO_ERROR)
+    {
+        std::cout << "OpenGL Error: 0x" << std::hex << error << std::endl;
+        return false;
+    }
+    return true;
+}
 
 struct ShaderSource
 {
@@ -93,6 +114,10 @@ int main()
     if (!glfwInit())
         return -1;
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
     if (!window)
@@ -103,6 +128,8 @@ int main()
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+
+    glfwSwapInterval(1); //V-Sync
 
     if (glewInit() != GLEW_OK)
         std::cout << "Error: glewInit() should go after glfwMakeContextCurrent()" << std::endl;
@@ -124,21 +151,6 @@ int main()
          0.0f,  0.0f, -1.2f,
          0.0f,  1.1f,  0.0f,
     };
-    float colors[] =
-    {
-        0, 0, 0,
-        0, 0, 1,
-        0, 1, 0,
-        0, 1, 1,
-        1, 0, 0,
-        1, 0, 1,
-        1, 1, 0,
-        1, 1, 1,
-
-        0.26f, 0.81f, 0.63f,
-        0.26f, 0.81f, 0.63f,
-        0.26f, 0.81f, 0.63f,
-    };
     unsigned int indicies[]
     {
         0, 1, 2,
@@ -158,6 +170,10 @@ int main()
     };
 
     //Position transfer
+    unsigned int vao[1];
+    glGenVertexArrays(1, vao);
+    glBindVertexArray(vao[0]);
+
     unsigned int posBuffer[1];
     glGenBuffers(1, posBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, posBuffer[0]);
@@ -167,20 +183,10 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
     //Index buffer object transfer
-    unsigned int iboBuffer[2];
+    unsigned int iboBuffer[1];
     glGenBuffers(1, iboBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboBuffer[0]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, (12 + 1) * 3 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
-
-    //Color transfer
-    unsigned int colorBuffer[2];
-    glGenBuffers(1, colorBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer[0]);
-    glBufferData(GL_ARRAY_BUFFER, (8 + 3) * 3 * sizeof(float), colors, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-
 
     //Shader creation
     ShaderSource shaderSrc = ParseShader("res/shaders/Basic.shader");
@@ -219,7 +225,7 @@ int main()
         glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glDrawElements(GL_TRIANGLES, (12 + 1) * 3, GL_UNSIGNED_INT, nullptr);
+        GLCall(glDrawElements(GL_TRIANGLES, (12 + 1) * 3, GL_UNSIGNED_INT, nullptr));
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
