@@ -133,8 +133,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Libraries\glm\detail\glm.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\VertexBuffer.cpp" />
+    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\VertexBufferLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -280,6 +286,8 @@
     <None Include="src\Libraries\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Libraries\glm\common.hpp" />
     <ClInclude Include="src\Libraries\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\Libraries\glm\detail\compute_vector_relational.hpp" />
@@ -567,6 +575,10 @@
     <ClInclude Include="src\Libraries\glm\vec3.hpp" />
     <ClInclude Include="src\Libraries\glm\vec4.hpp" />
     <ClInclude Include="src\Libraries\glm\vector_relational.hpp" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\VertexBuffer.h" />
+    <ClInclude Include="src\VertexArray.h" />
+    <ClInclude Include="src\VertexBufferLayout.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,101 +10,11 @@
 #include <string>
 #include <sstream>
 
-#define ASSERT(x) if (!(x)) __debugbreak();
-#define GLCall(x) GLClearError();\
-    x;\
-    ASSERT(GLLogCall())
-
-static void GLClearError()
-{
-    while (glGetError() != GL_NO_ERROR);
-}
-
-static bool GLLogCall()
-{
-    if (GLenum error = glGetError() != GL_NO_ERROR)
-    {
-        std::cout << "OpenGL Error: 0x" << std::hex << error << std::endl;
-        return false;
-    }
-    return true;
-}
-
-struct ShaderSource
-{
-    std::string vertexSrc;
-    std::string fragmentSrc;
-};
-
-static ShaderSource ParseShader(const std::string& filepath)
-{
-    std::ifstream stream(filepath);
-
-    enum class ShaderType
-    {
-        NONE = -1, VERTEX = 0, FRAGMENT = 1
-    };
-
-    std::string line;
-    std::stringstream ss[2];
-    ShaderType type = ShaderType::NONE;
-    while (getline(stream, line))
-    {
-        if (line.find("#shader") != std::string::npos)
-        {
-            if (line.find("vertex") != std::string::npos)
-                type = ShaderType::VERTEX;
-            else if (line.find("fragment") != std::string::npos)
-                type = ShaderType::FRAGMENT;
-        }
-        else
-        {
-            ss[(int)type] << line << '\n';
-        }
-    }
-
-    return { ss[0].str(), ss[1].str() };
-}
-
-static unsigned int CompileShader(const std::string& source, unsigned int type)
-{
-    unsigned int id = glCreateShader(type);
-    const char* src = source.c_str();
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
-
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-    if (result == GL_FALSE)
-    {
-        int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        char* message = new char[length];
-        glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Failed to compile: " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << std::endl;
-        std::cout << message << std::endl;
-        delete[] message;
-    }
-
-    return id;
-}
-
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
-{
-    unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(vertexShader, GL_VERTEX_SHADER);
-    unsigned int fs = CompileShader(fragmentShader, GL_FRAGMENT_SHADER);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
-}
+#include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "Shader.h"
 
 int main()
 {
@@ -169,30 +79,16 @@ int main()
         8, 9, 10,
     };
 
-    //Position transfer
-    unsigned int vao[1];
-    glGenVertexArrays(1, vao);
-    glBindVertexArray(vao[0]);
-
-    unsigned int posBuffer[1];
-    glGenBuffers(1, posBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, posBuffer[0]);
-    glBufferData(GL_ARRAY_BUFFER, (8 + 3) * 3 * sizeof(float), pos, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-
-    //Index buffer object transfer
-    unsigned int iboBuffer[1];
-    glGenBuffers(1, iboBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboBuffer[0]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, (12 + 1) * 3 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
+    VertexArray va;
+    VertexBuffer vb(pos, sizeof(pos));
+    VertexBufferLayout layout;
+    layout.Push<float>(3);
+    va.AddBuffer(vb, layout);
+    IndexBuffer ib(indicies, sizeof(indicies) / sizeof(indicies[0]));
 
     //Shader creation
-    ShaderSource shaderSrc = ParseShader("res/shaders/Basic.shader");
-    unsigned int shader = CreateShader(shaderSrc.vertexSrc, shaderSrc.fragmentSrc);
-    glUseProgram(shader);
-    
+    Shader shader("res/shaders/Basic.shader");
+    shader.Bind();
 
     //Matrix stuff
     //Cube
@@ -205,27 +101,25 @@ int main()
     );
     glm::mat4 model = glm::mat4(1.0f); //Object at origin
     glm::mat4 mvp = projection * view * model;
-    unsigned int matrixId = glGetUniformLocation(shader, "MVP1");
-    glUniformMatrix4fv(matrixId, 1, GL_FALSE, &mvp[0][0]);
+    shader.SetUniform4f("MVP1", mvp);
 
     //Triange
     model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
     mvp = projection * view * model;
-    matrixId = glGetUniformLocation(shader, "MVP2");
-    glUniformMatrix4fv(matrixId, 1, GL_FALSE, &mvp[0][0]);
+    shader.SetUniform4f("MVP2", mvp);
     
     //Depth stuff
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    GlCall(glEnable(GL_DEPTH_TEST));
+    GlCall(glDepthFunc(GL_LESS));
 
     //Game Loop
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        GlCall(glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+        GlCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-        GLCall(glDrawElements(GL_TRIANGLES, (12 + 1) * 3, GL_UNSIGNED_INT, nullptr));
+        GlCall(glDrawElements(GL_TRIANGLES, (12 + 1) * 3, GL_UNSIGNED_INT, nullptr)));
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -233,8 +127,6 @@ int main()
         /* Poll for and process events */
         glfwPollEvents();
     }
-
-    glDeleteProgram(shader);
 
     glfwTerminate();
     return 0;
