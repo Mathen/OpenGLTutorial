@@ -1,6 +1,6 @@
 #include "VertexBuffer.h"
 
-VertexBuffer::VertexBuffer(const void* data, unsigned int sizeBytes)
+VertexBuffer::VertexBuffer(const void* data, unsigned int sizeBytes) : mySizeBytes(sizeBytes)
 {
     GlCall(glGenBuffers(1, &myRendererId));
     GlCall(glBindBuffer(GL_ARRAY_BUFFER, myRendererId));
@@ -18,4 +18,11 @@ void VertexBuffer::Bind() const
 void VertexBuffer::Unbind() const
 {
     GlCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+}
+
+bool VertexBuffer::GetData(void* data, unsigned int& sizeBytes) const
+{
+    sizeBytes = mySizeBytes;
+    data = new unsigned char[mySizeBytes];
+    GlCall(glGetBufferSubData(myRendererId, 0, sizeBytes, data));
 }

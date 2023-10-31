@@ -1,8 +1,11 @@
 #pragma once
 
-#include "VertexBuffer.h";
+#include <GL/glew.h>
+
+#include "Debug.h"
+
+#include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
-#include <stdio.h>
 
 class VertexArray
 {
@@ -14,6 +17,8 @@ public:
 	~VertexArray();
 
 	void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
+	void RemoveBuffer(unsigned int rendererId);
+	void RemoveBuffer(const VertexBuffer& vb);
 
 	void Bind() const;
 	void Unbind() const;

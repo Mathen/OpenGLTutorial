@@ -89,6 +89,11 @@ void Shader::Unbind() const
     GlCall(glUseProgram(0));
 }
 
+void Shader::SetUniform1i(const std::string& name, const int value)
+{
+    int valueId = GetUniformLocation(name);
+    GlCall(glUniform1i(valueId, value));
+}
 void Shader::SetUniform4f(const std::string& name, const glm::mat4& matrix)
 {
     int matrixId = GetUniformLocation(name);

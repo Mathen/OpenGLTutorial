@@ -30,6 +30,17 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 	}
 }
 
+void VertexArray::RemoveBuffer(unsigned int rendererId)
+{
+	Bind();
+	GlCall(glDisableVertexAttribArray(rendererId));
+}
+void VertexArray::RemoveBuffer(const VertexBuffer& vb)
+{
+	Bind();
+	GlCall(glDisableVertexAttribArray(vb.GetRendererId()));
+}
+
 void VertexArray::Bind() const
 {
 	GlCall(glBindVertexArray(myRendererId));

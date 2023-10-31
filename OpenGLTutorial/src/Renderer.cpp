@@ -1,17 +1,22 @@
 #include "Renderer.h"
 
-void GlClearError()
+Renderer::Renderer()
 {
-    while (glGetError() != GL_NO_ERROR);
+    //Depth stuff
+    GlCall(glEnable(GL_DEPTH_TEST));
+    GlCall(glDepthFunc(GL_LESS));
 }
 
-bool GlLogCall()
+void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
 {
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR)
-    {
-        printf("OpenGL Error: 0x%04X", error);
-        return false;
-    }
-    return true;
+    va.Bind();
+    ib.Bind();
+    shader.Bind();
+
+    GlCall(glDrawElements(GL_TRIANGLES, ib.GetSize(), GL_UNSIGNED_INT, nullptr));
+}
+void Renderer::Clear() const
+{
+    GlCall(glClearColor(0.0f, 0.0f, 0.4f, 0.0f));
+    GlCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }

@@ -4,15 +4,11 @@
 layout(location = 0) in  vec4 position;
                      out vec4 fragmentColor;
 
-uniform mat4 MVP1;
-uniform mat4 MVP2;
+uniform mat4 MVP;
 
 void main()
 {
-    if (gl_VertexID < 8)
-        gl_Position = MVP1 * position;
-    else
-        gl_Position = MVP2 * position;
+    gl_Position = MVP * position;
     
     fragmentColor = (position + 1) / 2.0f;
 };

@@ -10,11 +10,14 @@
 #include <string>
 #include <sstream>
 
+#include "Debug.h"
+
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 int main()
 {
@@ -48,18 +51,14 @@ int main()
 
     float pos[] = 
     { 
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f,  1.0f,
-
-         0.0f,  0.0f,  1.2f,
-         0.0f,  0.0f, -1.2f,
-         0.0f,  1.1f,  0.0f,
+        -1.0f, -1.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f,  1.0f,    1.0f, 0.0f,
+        -1.0f,  1.0f, -1.0f,    0.0f, 1.0f,
+        -1.0f,  1.0f,  1.0f,    1.0f, 1.0f,
+         1.0f, -1.0f, -1.0f,    0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f,    1.0f, 0.0f,
+         1.0f,  1.0f, -1.0f,    0.0f, 1.0f,
+         1.0f,  1.0f,  1.0f,    1.0f, 1.0f,
     };
     unsigned int indicies[]
     {
@@ -75,20 +74,30 @@ int main()
         0, 4, 6,
         5, 4, 6,
         7, 5, 6,
-
-        8, 9, 10,
     };
+
+    //GlCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    //GlCall(glEnable(GL_BLEND));
 
     VertexArray va;
     VertexBuffer vb(pos, sizeof(pos));
     VertexBufferLayout layout;
     layout.Push<float>(3);
+    layout.Push<float>(2);
     va.AddBuffer(vb, layout);
     IndexBuffer ib(indicies, sizeof(indicies) / sizeof(indicies[0]));
 
+    //Mesh mesh(ib, vb, va);
+
     //Shader creation
-    Shader shader("res/shaders/Basic.shader");
+    //Shader shader("res/shaders/Basic.shader");
+    Shader shader("res/shaders/Texture.shader");
     shader.Bind();
+
+    //Texture creation
+    Texture texture("res/textures/landscapeFinal1.png");
+    texture.Bind();
+    shader.SetUniform1i("uTexture", 0);
 
     //Matrix stuff
     //Cube
@@ -101,25 +110,16 @@ int main()
     );
     glm::mat4 model = glm::mat4(1.0f); //Object at origin
     glm::mat4 mvp = projection * view * model;
-    shader.SetUniform4f("MVP1", mvp);
+    shader.SetUniform4f("MVP", mvp);
 
-    //Triange
-    model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
-    mvp = projection * view * model;
-    shader.SetUniform4f("MVP2", mvp);
-    
-    //Depth stuff
-    GlCall(glEnable(GL_DEPTH_TEST));
-    GlCall(glDepthFunc(GL_LESS));
+    Renderer renderer;
 
     //Game Loop
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        GlCall(glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-        GlCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
-        GlCall(glDrawElements(GL_TRIANGLES, (12 + 1) * 3, GL_UNSIGNED_INT, nullptr)));
+        renderer.Clear();
+        renderer.Draw(va, ib, shader);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

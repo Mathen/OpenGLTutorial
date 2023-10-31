@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Renderer.h"
+#include <GL/glew.h>
+
+#include "Debug.h"
 
 class IndexBuffer
 {
@@ -14,4 +16,6 @@ public:
 
 	void Bind() const;
 	void Unbind() const;
+
+	unsigned int GetSize() const { return mySize; }
 };

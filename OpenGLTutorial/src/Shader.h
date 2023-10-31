@@ -5,10 +5,12 @@
 #include <sstream>
 #include <unordered_map>
 
+#include <GL/glew.h>
+
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "Renderer.h"
+#include "Debug.h"
 
 struct ShaderSource
 {
@@ -31,6 +33,7 @@ public:
 	void Unbind() const;
 
 	//Set Uniforms
+	void SetUniform1i(const std::string& name, const int value);
 	void SetUniform4f(const std::string& name, const glm::mat4& matrix);
 
 private:
