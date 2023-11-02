@@ -7,15 +7,19 @@
 class IndexBuffer
 {
 private:
-	unsigned int myRendererId = 0;
-	unsigned int mySize = 0;
+	unsigned int myRendererId;
+	unsigned int mySize;
 
 public:
 	IndexBuffer(const unsigned int* data, unsigned int sizeArr);
+	IndexBuffer();
 	~IndexBuffer();
+
+	void SetBuffer(const unsigned int* data, unsigned int sizeArr);
 
 	void Bind() const;
 	void Unbind() const;
 
-	unsigned int GetSize() const { return mySize; }
+	inline unsigned int GetSize() const { return mySize; }
+	unsigned int* GetData() const;
 };

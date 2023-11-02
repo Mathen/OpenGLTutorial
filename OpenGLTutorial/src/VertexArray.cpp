@@ -1,19 +1,25 @@
 #include "VertexArray.h"
 
-VertexArray::VertexArray() : myRendererId(0)
+VertexArray::VertexArray() : myRendererId(0), myVb(nullptr), myLayout(nullptr)
 {
 	GlCall(glGenVertexArrays(1, &myRendererId));
 }
 VertexArray::~VertexArray()
 {
+	delete myVb;
+	delete myLayout;
+
 	GlCall(glDeleteVertexArrays(1, &myRendererId));
 }
 
-void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
+void VertexArray::AddBuffer(VertexBuffer* vb, VertexBufferLayout* layout)
 {
+	myVb = vb;
+	myLayout = layout;
+
 	Bind();
-	vb.Bind();
-	const auto& elements = layout.GetElements();
+	vb->Bind();
+	const auto& elements = layout->GetElements();
 	unsigned char* offset = 0;
 	for (unsigned int i = 0; i < elements.size(); i++)
 	{
@@ -24,21 +30,14 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 			e.dimention,
 			e.type,
 			e.normalized,
-			layout.GetStride(),
+			layout->GetStride(),
 			offset));
 		offset += e.dimention * VertexBufferElement::GetBytesOfType(e.type);
 	}
 }
-
-void VertexArray::RemoveBuffer(unsigned int rendererId)
+void VertexArray::AddBuffer(VertexBuffer& vb, VertexBufferLayout& layout)
 {
-	Bind();
-	GlCall(glDisableVertexAttribArray(rendererId));
-}
-void VertexArray::RemoveBuffer(const VertexBuffer& vb)
-{
-	Bind();
-	GlCall(glDisableVertexAttribArray(vb.GetRendererId()));
+	AddBuffer(&vb, &layout);
 }
 
 void VertexArray::Bind() const

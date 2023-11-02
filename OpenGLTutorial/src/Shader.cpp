@@ -5,6 +5,10 @@ Shader::Shader(const std::string& filepath) : myFilepath(filepath), myRendererId
     ShaderSource ss = ParseShader();
     myRendererId = CreateShader(ss.vertexSrc, ss.fragmentSrc);
 }
+Shader::Shader() : myRendererId(0)
+{
+
+}
 Shader::~Shader()
 {
     GlCall(glDeleteProgram(myRendererId));
@@ -91,11 +95,13 @@ void Shader::Unbind() const
 
 void Shader::SetUniform1i(const std::string& name, const int value)
 {
+    Bind();
     int valueId = GetUniformLocation(name);
     GlCall(glUniform1i(valueId, value));
 }
 void Shader::SetUniform4f(const std::string& name, const glm::mat4& matrix)
 {
+    Bind();
     int matrixId = GetUniformLocation(name);
     GlCall(glUniformMatrix4fv(matrixId, 1, GL_FALSE, &matrix[0][0]));
 }

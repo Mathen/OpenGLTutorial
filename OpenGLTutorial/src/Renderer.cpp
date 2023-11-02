@@ -15,6 +15,15 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 
     GlCall(glDrawElements(GL_TRIANGLES, ib.GetSize(), GL_UNSIGNED_INT, nullptr));
 }
+void Renderer::Draw(const Mesh& mesh) const
+{
+    mesh.GetVertexArray().Bind();
+    mesh.GetIndexBuffer().Bind();
+    mesh.GetShader().Bind();
+
+    GlCall(glDrawElements(GL_TRIANGLES, mesh.GetIndexBuffer().GetSize(), GL_UNSIGNED_INT, nullptr));
+}
+
 void Renderer::Clear() const
 {
     GlCall(glClearColor(0.0f, 0.0f, 0.4f, 0.0f));

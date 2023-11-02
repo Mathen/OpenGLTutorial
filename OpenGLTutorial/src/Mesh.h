@@ -1,19 +1,41 @@
 #pragma once
 
-#include "Includes.h"
+#include <GL/glew.h>
+
+#include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "VertexArray.h"
+#include "Shader.h"
+
+/*
+Mesh contains:
+	- Materials (single shader for now)
+	- VertexArray
+		* Contains layout and verticies
+	- IndexBuffer
+*/
 
 class Mesh
 {
-private:
-	IndexBuffer  myIndexBuffer;
-	VertexBuffer myVerticiesBuffer;
-	VertexArray  myVertexArray;
+protected:
+	IndexBuffer* myIndexBuffer;
+	VertexArray* myVertexArray;
+	Shader* myShader;
 
 public:
-	Mesh(IndexBuffer ib, VertexBuffer vb, VertexArray va) : myIndexBuffer(ib), myVerticiesBuffer(vb), myVertexArray(va) {};
-	~Mesh() {};
+	Mesh(IndexBuffer* ib, Shader* shader, VertexArray* va) : myIndexBuffer(ib), myShader(shader), myVertexArray(va) {}
+	~Mesh();
 
-	const IndexBuffer&  GetIndexBuffer()	 const { return myIndexBuffer; }
-	const VertexBuffer& GetVerticiesBuffer() const { return myVerticiesBuffer; }
-	const VertexArray&  GetVertexArray()	 const { return myVertexArray; }
+protected:
+	Mesh()
+	{
+		myIndexBuffer = new IndexBuffer();
+		myVertexArray = new VertexArray();
+		myShader = new Shader();
+	}
+
+public:
+	const IndexBuffer& GetIndexBuffer() const { return *myIndexBuffer; }
+	const Shader& GetShader() const { return *myShader; }
+	const VertexArray& GetVertexArray() const { return *myVertexArray; }
 };

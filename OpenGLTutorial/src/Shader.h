@@ -27,6 +27,7 @@ private:
 
 public:
 	Shader(const std::string& filepath);
+	Shader();
 	~Shader();
 
 	void Bind() const;

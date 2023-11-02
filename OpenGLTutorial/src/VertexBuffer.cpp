@@ -20,9 +20,10 @@ void VertexBuffer::Unbind() const
     GlCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
-bool VertexBuffer::GetData(void* data, unsigned int& sizeBytes) const
+void* VertexBuffer::GetData() const
 {
-    sizeBytes = mySizeBytes;
-    data = new unsigned char[mySizeBytes];
-    GlCall(glGetBufferSubData(myRendererId, 0, sizeBytes, data));
+    Bind();
+    void* data = new unsigned char[mySizeBytes];
+    GlCall(glGetBufferSubData(GL_ARRAY_BUFFER, 0, mySizeBytes, (void*)data));
+    return data;
 }

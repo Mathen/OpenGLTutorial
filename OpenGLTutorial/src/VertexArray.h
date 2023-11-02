@@ -12,14 +12,19 @@ class VertexArray
 private:
 	unsigned int myRendererId;
 
+	VertexBuffer* myVb;
+	VertexBufferLayout* myLayout;
+
 public:
 	VertexArray();
 	~VertexArray();
 
-	void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
-	void RemoveBuffer(unsigned int rendererId);
-	void RemoveBuffer(const VertexBuffer& vb);
+	void AddBuffer(VertexBuffer* vb, VertexBufferLayout* layout);
+	void AddBuffer(VertexBuffer& vb, VertexBufferLayout& layout);
 
 	void Bind() const;
 	void Unbind() const;
+
+	inline const VertexBuffer* GetVertexBuffer() const { return myVb; }
+	inline const VertexBufferLayout* GetLayout() const { return myLayout; }
 };

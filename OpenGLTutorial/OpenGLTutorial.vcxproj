@@ -133,20 +133,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CubeFractal.cpp" />
+    <ClCompile Include="src\Fractal.cpp" />
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\Libraries\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Libraries\glm\detail\glm.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\TriangleFractal.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBufferLayout.cpp" />
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\Rainbow.shader" />
     <None Include="res\shaders\Texture.shader" />
     <None Include="src\Libraries\glm\detail\func_common.inl" />
     <None Include="src\Libraries\glm\detail\func_common_simd.inl" />
@@ -289,8 +293,11 @@
     <None Include="src\Libraries\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\CubeFractal.h" />
+    <ClInclude Include="src\Fractal.h" />
     <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\Libraries\stb_image\stb_image.h" />
+    <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Libraries\glm\common.hpp" />
@@ -581,6 +588,7 @@
     <ClInclude Include="src\Libraries\glm\vec4.hpp" />
     <ClInclude Include="src\Libraries\glm\vector_relational.hpp" />
     <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\TriangleFractal.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\VertexBufferLayout.h" />

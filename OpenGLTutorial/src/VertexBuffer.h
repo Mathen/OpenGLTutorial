@@ -19,5 +19,6 @@ public:
 
 	inline unsigned int GetRendererId() const { return myRendererId; }
 
-	bool GetData(void* data, unsigned int& sizeBytes) const;
+	void* GetData() const;
+	inline unsigned int GetSizeBytes() const { return mySizeBytes; };
 };

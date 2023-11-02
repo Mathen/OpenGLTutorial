@@ -19,24 +19,38 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "Mesh.h"
+#include "Fractal.h"
+#include "CubeFractal.h"
+#include "TriangleFractal.h"
+
+void Tutorial();
+void Fractal();
+
 int main()
+{
+    //Tutorial();
+    Fractal();
+}
+
+void Fractal()
 {
     GLFWwindow* window;
 
     /* Initialize the library */
     if (!glfwInit())
-        return -1;
+        return;
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(1920, 1080, "Fractal", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
-        return -1;
+        return;
     }
 
     /* Make the window's context current */
@@ -49,8 +63,92 @@ int main()
 
     std::cout << "Driver Version: " << glGetString(GL_VERSION) << std::endl;
 
-    float pos[] = 
-    { 
+    //GlCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    //GlCall(glEnable(GL_BLEND));
+
+    Shader* rainbowShader = new Shader("res/shaders/Rainbow.shader");
+    TriangleFractal* triangle = new TriangleFractal(rainbowShader);
+
+    //Matrix stuff
+    //Cube
+    glm::mat4 mvp = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+    /*
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+    //glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f);
+    glm::mat4 view = glm::lookAt(
+        glm::vec3(3, 4, 4), // Camera is at (4,3,3), in World Space
+        glm::vec3(0, 0, 0), // and looks at the origin
+        glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+    );
+    glm::mat4 model = glm::mat4(1.0f); //Object at origin
+    mvp = projection * view * model;
+    //*/
+    rainbowShader->SetUniform4f("MVP", mvp);
+
+    Renderer renderer;
+
+    //Game Loop
+    bool space = false;
+    while (!glfwWindowShouldClose(window))
+    {
+        /* Render here */
+        renderer.Clear();
+        renderer.Draw(*triangle);
+
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !space)
+        {
+            triangle->Divide();
+            space = true;
+        }
+        if (glfwGetKey(window, GLFW_KEY_SPACE) != GLFW_PRESS)
+        {
+            space = false;
+        }
+
+        /* Swap front and back buffers */
+        glfwSwapBuffers(window);
+
+        /* Poll for and process events */
+        glfwPollEvents();
+    }
+
+    delete triangle;
+    glfwTerminate();
+    return;
+}
+
+void Tutorial()
+{
+    GLFWwindow* window;
+
+    /* Initialize the library */
+    if (!glfwInit())
+        return;
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    /* Create a windowed mode window and its OpenGL context */
+    window = glfwCreateWindow(640, 480, "Tutorial", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        return;
+    }
+
+    /* Make the window's context current */
+    glfwMakeContextCurrent(window);
+
+    glfwSwapInterval(1); //V-Sync
+
+    if (glewInit() != GLEW_OK)
+        std::cout << "Error: glewInit() should go after glfwMakeContextCurrent()" << std::endl;
+
+    std::cout << "Driver Version: " << glGetString(GL_VERSION) << std::endl;
+
+    float pos[] =
+    {
         -1.0f, -1.0f, -1.0f,    0.0f, 0.0f,
         -1.0f, -1.0f,  1.0f,    1.0f, 0.0f,
         -1.0f,  1.0f, -1.0f,    0.0f, 1.0f,
@@ -87,10 +185,8 @@ int main()
     va.AddBuffer(vb, layout);
     IndexBuffer ib(indicies, sizeof(indicies) / sizeof(indicies[0]));
 
-    //Mesh mesh(ib, vb, va);
-
     //Shader creation
-    //Shader shader("res/shaders/Basic.shader");
+    //Shader shader("res/shaders/Rainbow.shader");
     Shader shader("res/shaders/Texture.shader");
     shader.Bind();
 
@@ -129,5 +225,4 @@ int main()
     }
 
     glfwTerminate();
-    return 0;
 }
