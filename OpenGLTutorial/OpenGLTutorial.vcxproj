@@ -143,6 +143,7 @@
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Libraries\glm\detail\glm.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\SphereFractal.cpp" />
     <ClCompile Include="src\TriangleFractal.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\OutlineBlack.shader" />
     <None Include="res\shaders\Rainbow.shader" />
     <None Include="res\shaders\Texture.shader" />
     <None Include="src\Libraries\glm\detail\func_common.inl" />
@@ -588,6 +590,7 @@
     <ClInclude Include="src\Libraries\glm\vec4.hpp" />
     <ClInclude Include="src\Libraries\glm\vector_relational.hpp" />
     <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\SphereFractal.h" />
     <ClInclude Include="src\TriangleFractal.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexArray.h" />

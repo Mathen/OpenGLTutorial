@@ -2,6 +2,7 @@
 
 TriangleFractal::TriangleFractal(Shader* shader)
 {
+	myMaxDiv = 15;
 	myShader = shader;
 
 	float pos[] =

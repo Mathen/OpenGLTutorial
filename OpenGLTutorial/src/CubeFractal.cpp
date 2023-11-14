@@ -1,43 +1,27 @@
 #include "CubeFractal.h"
 
+float Cube::size{ 1.0f };
+
 CubeFractal::CubeFractal(Shader* shader)
 {
+	myMaxDiv = 5;
 	myShader = shader;
 
-	float pos[] =
-	{
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f,  1.0f,
-		 1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f,  1.0f,
-		 1.0f,  1.0f, -1.0f,
-		 1.0f,  1.0f,  1.0f,
-	};
-	VertexBuffer* vb = new VertexBuffer(pos, sizeof(pos));
+	cubes.push_back(Cube(0.0f, 0.0f, 0.0f));
+	Cube::size = 1.0f;
+
+	std::vector<float> verticies;
+	cubes[0].AddVerticies(verticies);
+	VertexBuffer* vb = new VertexBuffer((void*)verticies.data(), verticies.size() * 4);
 	VertexBufferLayout* layout = new VertexBufferLayout;
 	layout->Push<float>(3);
 	myVertexArray = new VertexArray;
 	myVertexArray->AddBuffer(vb, layout);
 
-	unsigned int indicies[] =
-    {
-		0, 1, 2,
-		1, 2, 3,
-		0, 1, 5,
-		5, 4, 0,
-		1, 3, 7,
-		1, 5, 7,
-		3, 2, 7,
-		7, 6, 2,
-		2, 0, 6,
-		0, 4, 6,
-		5, 4, 6,
-		7, 5, 6,
-    };
+	std::vector<unsigned int> indexes;
+	cubes[0].AddIndexes(indexes, 0);
 	myIndexBuffer = new IndexBuffer;
-	myIndexBuffer->SetBuffer(indicies, sizeof(indicies) / 4);
+	myIndexBuffer->SetBuffer(indexes.data(), indexes.size());
 }
 
 void CubeFractal::Divide()
@@ -46,18 +30,59 @@ void CubeFractal::Divide()
 		return;
 	myDiv++;
 
-	const VertexBuffer* vb = myVertexArray->GetVertexBuffer();
-	float* lastVerticies = (float*)vb->GetData();
-	unsigned int lastVbSize = vb->GetSizeBytes() / 4;
+	Cube::size /= 3.0f;
+	std::vector<Cube> newCubes;
 
-	unsigned int* lastIndexes = myIndexBuffer->GetData();
-	unsigned int lastIndexSize = myIndexBuffer->GetSize();
+	for (unsigned int cube = 0; cube < cubes.size(); cube++)
+	{
+		const glm::vec3 offsets[] =
+		{
+			{-1.0f, -1.0f, -1.0f},
+			{ 0.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{ 0.0f, -1.0f,  1.0f},
+			{ 1.0f, -1.0f,  1.0f},
+			{ 1.0f, -1.0f,  0.0f},
+			{-1.0f, -1.0f,  0.0f},
+			{-1.0f,  1.0f, -1.0f},
+			{ 0.0f,  1.0f, -1.0f},
+			{ 1.0f,  1.0f, -1.0f},
+			{-1.0f,  1.0f,  1.0f},
+			{ 0.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  0.0f},
+			{-1.0f,  1.0f,  0.0f},
+			{-1.0f,  0.0f, -1.0f},
+			{-1.0f,  0.0f,  1.0f},
+			{ 1.0f,  0.0f, -1.0f},
+			{ 1.0f,  0.0f,  1.0f},
+		};
+
+		for (unsigned int i = 0; i < 20; i++)
+		{
+			newCubes.push_back(Cube(cubes[cube].myPosition + offsets[i] * 2.0f * Cube::size));
+		}
+	}
+	cubes = newCubes;
+
+	std::vector<float> verticies;
+	std::vector<unsigned int> indexes;
+	for (unsigned int i = 0; i < cubes.size(); i++)
+	{
+		cubes[i].AddVerticies(verticies);
+		cubes[i].AddIndexes(indexes, i * 8);
+	}
 
 	delete myVertexArray;
 	delete myIndexBuffer;
 
+	VertexBuffer* vb = new VertexBuffer((void*)verticies.data(), verticies.size() * 4);
+	VertexBufferLayout* layout = new VertexBufferLayout;
+	layout->Push<float>(3);
+	myVertexArray = new VertexArray;
+	myVertexArray->AddBuffer(vb, layout);
 
-
-	delete lastVerticies;
-	delete lastIndexes;
+	myIndexBuffer = new IndexBuffer;
+	myIndexBuffer->SetBuffer(indexes.data(), indexes.size());
 }

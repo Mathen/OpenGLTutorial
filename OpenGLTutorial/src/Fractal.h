@@ -7,7 +7,7 @@
 class Fractal : public Mesh
 {
 protected:
-	const unsigned int myMaxDiv = 10;
+	unsigned int myMaxDiv = 5;
 	unsigned int myDiv = 0;
 
 public:

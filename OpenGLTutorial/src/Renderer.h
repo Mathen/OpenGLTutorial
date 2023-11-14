@@ -14,8 +14,10 @@ class Renderer
 public:
     Renderer();
 
-    void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
-    void Draw(const Mesh& mesh) const;
+    void DrawTriangles(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+    void DrawTriangles(const Mesh& mesh) const;
+
+    void DrawTrianglesOutline(const Mesh& mesh, const Shader& shader) const;
 
     void Clear() const;
 };

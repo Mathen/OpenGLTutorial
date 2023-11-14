@@ -60,6 +60,9 @@
     <ClCompile Include="src\TriangleFractal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SphereFractal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Rainbow.shader" />
@@ -481,6 +484,7 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="res\shaders\Texture.shader" />
+    <None Include="res\shaders\OutlineBlack.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Libraries\glm\detail\_features.hpp">
@@ -1381,6 +1385,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\TriangleFractal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SphereFractal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

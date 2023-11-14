@@ -1,2 +1,16 @@
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\CubeFractal.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\CubeFractal.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Fractal.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\Fractal.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Debug.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\Debug.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Libraries\stb_image\stb_image.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\stb_image.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Mesh.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\Mesh.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Shader.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\Shader.obj
 C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Application.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\Application.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\IndexBuffer.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\IndexBuffer.obj
 C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Libraries\glm\detail\glm.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\glm.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Renderer.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\Renderer.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\SphereFractal.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\SphereFractal.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\TriangleFractal.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\TriangleFractal.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\VertexBuffer.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\VertexBuffer.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\VertexArray.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\VertexArray.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\VertexBufferLayout.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\VertexBufferLayout.obj
+C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\src\Texture.cpp;C:\Users\anna_\Documents\Git\OpenGLTutorial\OpenGLTutorial\x64\Debug\Texture.obj

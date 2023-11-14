@@ -23,17 +23,18 @@
 #include "Fractal.h"
 #include "CubeFractal.h"
 #include "TriangleFractal.h"
+#include "SphereFractal.h"
 
 void Tutorial();
-void Fractal();
+void FractalSim();
 
 int main()
 {
     //Tutorial();
-    Fractal();
+    FractalSim();
 }
 
-void Fractal()
+void FractalSim()
 {
     GLFWwindow* window;
 
@@ -67,16 +68,50 @@ void Fractal()
     //GlCall(glEnable(GL_BLEND));
 
     Shader* rainbowShader = new Shader("res/shaders/Rainbow.shader");
-    TriangleFractal* triangle = new TriangleFractal(rainbowShader);
+    Shader* outlineShader = new Shader("res/shaders/OutlineBlack.shader");
+    
+
+    Fractal* fractal = nullptr;
+    std::cout << "Enter shape (1, 2, 3):" << std::endl;
+    int i;
+    std::cin >> i;
+    if (i == 1)
+    {
+        fractal = new SphereFractal(rainbowShader);
+        std::cout << "Selected Sphere\n";
+    }
+    else if (i == 2)
+    {
+        fractal = new TriangleFractal(rainbowShader);
+        std::cout << "Selected Triangle\n";
+    }
+    else if (i == 3)
+    {
+        fractal = new CubeFractal(rainbowShader);
+        std::cout << "Selected Cube\n";
+    }
+    else
+    {
+        std::cout << "Not valid shape" << std::endl;
+        return;
+    }
+
+    bool outline;
+    char temp;
+    std::cout << "Show Edges (Y/N):\n";
+    std::cin >> temp;
+    outline = temp == 'Y';
 
     //Matrix stuff
     //Cube
     glm::mat4 mvp = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
-    /*
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+    //*
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
     //glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f);
+
+    glm::vec3 cameraPosition(3, 4, 4);
     glm::mat4 view = glm::lookAt(
-        glm::vec3(3, 4, 4), // Camera is at (4,3,3), in World Space
+        cameraPosition, // Camera is at (4,3,3), in World Space
         glm::vec3(0, 0, 0), // and looks at the origin
         glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
     );
@@ -84,6 +119,7 @@ void Fractal()
     mvp = projection * view * model;
     //*/
     rainbowShader->SetUniform4f("MVP", mvp);
+    outlineShader->SetUniform4f("MVP", mvp);
 
     Renderer renderer;
 
@@ -93,17 +129,55 @@ void Fractal()
     {
         /* Render here */
         renderer.Clear();
-        renderer.Draw(*triangle);
+        renderer.DrawTriangles(*fractal);
+        if (outline)
+            renderer.DrawTrianglesOutline(*fractal, *outlineShader);
 
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !space)
+        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !space)
         {
-            triangle->Divide();
+            fractal->Divide();
             space = true;
         }
-        if (glfwGetKey(window, GLFW_KEY_SPACE) != GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_ENTER) != GLFW_PRESS)
         {
             space = false;
         }
+
+        float speed = 10.0f;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            cameraPosition.x += -0.01f * speed;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            cameraPosition.x += 0.01f * speed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            cameraPosition.y += -0.01f * speed;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            cameraPosition.y += 0.01f * speed;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        {
+            cameraPosition.z += -0.01f * speed;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        {
+            cameraPosition.z += 0.01f * speed;
+        }
+
+        view = glm::lookAt(
+            cameraPosition, // Camera is at (4,3,3), in World Space
+            glm::vec3(0, 0, 0), // and looks at the origin
+            glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+        );
+        mvp = projection * view * model;
+        rainbowShader->SetUniform4f("MVP", mvp);
+        outlineShader->SetUniform4f("MVP", mvp);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -112,7 +186,8 @@ void Fractal()
         glfwPollEvents();
     }
 
-    delete triangle;
+    delete fractal;
+    delete outlineShader;
     glfwTerminate();
     return;
 }
@@ -215,7 +290,7 @@ void Tutorial()
     {
         /* Render here */
         renderer.Clear();
-        renderer.Draw(va, ib, shader);
+        renderer.DrawTriangles(va, ib, shader);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
