@@ -7,6 +7,7 @@
 #include "stb_image/stb_image.h"
 
 #include "Debug.h"
+#include "DeviceMemoryManager.h"
 
 class Texture
 {
@@ -21,6 +22,9 @@ private:
 
 public:
 	Texture(const std::string& path);
+	Texture(Texture& vb);
+	Texture& operator=(const Texture& tx);
+	Texture();
 	~Texture();
 
 	void Bind(unsigned int slot = 0) const;

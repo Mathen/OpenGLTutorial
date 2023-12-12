@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -133,6 +133,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\DeviceMemoryManager.cpp" />
+    <ClCompile Include="src\GeometryData.cpp" />
+    <ClCompile Include="src\GeometryInOut.cpp" />
     <ClCompile Include="src\CubeFractal.cpp" />
     <ClCompile Include="src\Fractal.cpp" />
     <ClCompile Include="src\Debug.cpp" />
@@ -153,6 +157,7 @@
   <ItemGroup>
     <None Include="res\shaders\OutlineBlack.shader" />
     <None Include="res\shaders\Rainbow.shader" />
+    <None Include="res\shaders\Standard.shader" />
     <None Include="res\shaders\Texture.shader" />
     <None Include="src\Libraries\glm\detail\func_common.inl" />
     <None Include="src\Libraries\glm\detail\func_common_simd.inl" />
@@ -295,6 +300,10 @@
     <None Include="src\Libraries\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Material.h" />
+    <ClInclude Include="src\DeviceMemoryManager.h" />
+    <ClInclude Include="src\GeometryData.h" />
+    <ClInclude Include="src\GeometryInOut.h" />
     <ClInclude Include="src\CubeFractal.h" />
     <ClInclude Include="src\Fractal.h" />
     <ClInclude Include="src\Debug.h" />

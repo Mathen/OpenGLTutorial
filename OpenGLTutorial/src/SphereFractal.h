@@ -13,7 +13,7 @@ private:
 	unsigned int myDiameterVerticies = 1;
 
 public:
-	SphereFractal(Shader* shader);
+	SphereFractal(Shader shader);
 
 	void Divide();
 };

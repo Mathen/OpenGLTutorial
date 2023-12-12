@@ -2,7 +2,8 @@
 
 void GlClearError()
 {
-    while (glGetError() != GL_NO_ERROR);
+    int loop = 10;
+    while (glGetError() != GL_NO_ERROR && loop--);
 }
 
 bool GlLogCall()

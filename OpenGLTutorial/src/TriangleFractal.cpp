@@ -1,6 +1,6 @@
 #include "TriangleFractal.h"
 
-TriangleFractal::TriangleFractal(Shader* shader)
+TriangleFractal::TriangleFractal(Shader& shader)
 {
 	myMaxDiv = 15;
 	myShader = shader;
@@ -11,18 +11,16 @@ TriangleFractal::TriangleFractal(Shader* shader)
 		 1.0f, -1.0f,
 		 0.0f,  1.0f,
 	};
-	VertexBuffer* vb = new VertexBuffer(pos, sizeof(pos));
-	VertexBufferLayout* layout = new VertexBufferLayout;
-	layout->Push<float>(2);
-	myVertexArray = new VertexArray;
-	myVertexArray->AddBuffer(vb, layout);
+	VertexBuffer vb(pos, sizeof(pos));
+	VertexBufferLayout layout;
+	layout.Push<float>(2);
+	myVertexArray.SetBuffer(vb, layout);
 
 	unsigned int indicies[] =
     {
 		0, 1, 2,
     };
-	myIndexBuffer = new IndexBuffer;
-	myIndexBuffer->SetBuffer(indicies, sizeof(indicies) / 4);
+	myIndexBuffer.SetBuffer(indicies, sizeof(indicies) / 4);
 }
 
 void TriangleFractal::Divide()
@@ -31,15 +29,12 @@ void TriangleFractal::Divide()
 		return;
 	myDiv++;
 
-	const VertexBuffer* lastVb = myVertexArray->GetVertexBuffer();
-	float* lastVerticies = (float*)lastVb->GetData();
-	unsigned int lastVbSize = lastVb->GetSizeBytes() / 4;
+	const VertexBuffer& lastVb = myVertexArray.GetVertexBuffer();
+	float* lastVerticies = (float*)lastVb.GetData();
+	unsigned int lastVbSize = lastVb.GetSizeBytes() / 4;
 
-	unsigned int* lastIndexes = myIndexBuffer->GetData();
-	unsigned int lastIndexSize = myIndexBuffer->GetSize();
-
-	delete myVertexArray;
-	delete myIndexBuffer;
+	unsigned int* lastIndexes = myIndexBuffer.GetData();
+	unsigned int lastIndexSize = myIndexBuffer.GetSize();
 
 	std::vector<float> verticies;
 	for (unsigned int i = 0; i < lastVbSize; i++)
@@ -85,15 +80,10 @@ void TriangleFractal::Divide()
 		indexes.push_back(indexOffset + 2);
 	}
 
-	VertexBuffer* vb = new VertexBuffer(verticies.data(), verticies.size() * 4);
-	VertexBufferLayout* layout = new VertexBufferLayout;
-	layout->Push<float>(2);
-	myVertexArray = new VertexArray;
-	myVertexArray->AddBuffer(vb, layout);
+	VertexBuffer vb(verticies.data(), verticies.size() * 4);
+	VertexBufferLayout layout;
+	layout.Push<float>(2);
+	myVertexArray.SetBuffer(vb, layout);
 
-	myIndexBuffer = new IndexBuffer;
-	myIndexBuffer->SetBuffer(indexes.data(), indexes.size());
-
-	delete lastVerticies;
-	delete lastIndexes;
+	myIndexBuffer.SetBuffer(indexes.data(), indexes.size());
 }

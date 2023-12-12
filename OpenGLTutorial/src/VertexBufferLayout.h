@@ -30,10 +30,10 @@ class VertexBufferLayout
 {
 private:
 	std::vector<VertexBufferElement> myElements;
-	unsigned int myStride;
+	unsigned int myStride = 0;
 
 public:
-	VertexBufferLayout() : myStride(0) {}
+	VertexBufferLayout() {}
 
 	template<typename T>
 	void Push(unsigned int dimention)
@@ -63,5 +63,5 @@ public:
 	}
 
 	inline const std::vector<VertexBufferElement>& GetElements() const { return myElements; }
-	inline unsigned int GetStride() const { return myStride; }
+	inline const unsigned int GetStride() const { return myStride; }
 };

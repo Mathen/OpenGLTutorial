@@ -1,6 +1,6 @@
 #include "SphereFractal.h"
 
-SphereFractal::SphereFractal(Shader* shader)
+SphereFractal::SphereFractal(Shader shader)
 {
 	myMaxDiv = 20;
 	myShader = shader;
@@ -32,14 +32,12 @@ SphereFractal::SphereFractal(Shader* shader)
 		7, 5, 6,
 	};
 
-	VertexBuffer* vb = new VertexBuffer((void*)verticies, sizeof(verticies));
-	VertexBufferLayout* layout = new VertexBufferLayout;
-	layout->Push<float>(3);
-	myVertexArray = new VertexArray;
-	myVertexArray->AddBuffer(vb, layout);
+	VertexBuffer vb((void*)verticies, sizeof(verticies));
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	myVertexArray.SetBuffer(vb, layout);
 
-	myIndexBuffer = new IndexBuffer;
-	myIndexBuffer->SetBuffer(indexes, sizeof(indexes) / 4);
+	myIndexBuffer.SetBuffer(indexes, sizeof(indexes) / 4);
 }
 
 void SphereFractal::Divide()
@@ -47,9 +45,6 @@ void SphereFractal::Divide()
 	if (myMaxDiv <= myDiv)
 		return;
 	myDiv++;
-
-	delete myVertexArray;
-	delete myIndexBuffer;
 
 	const unsigned int length = (myDiv + 1) * 2;
 	std::vector<std::vector<std::vector<int>>> grid(length, std::vector<std::vector<int>>(length, std::vector<int>(length, -1)));
@@ -132,11 +127,10 @@ void SphereFractal::Divide()
 			}
 		}
 	}
-	VertexBuffer* vb = new VertexBuffer((void*)verticies.data(), vertexIndex * 4 * 3);
-	VertexBufferLayout* layout = new VertexBufferLayout;
-	layout->Push<float>(3);
-	myVertexArray = new VertexArray;
-	myVertexArray->AddBuffer(vb, layout);
+	VertexBuffer vb((void*)verticies.data(), vertexIndex * 4 * 3);
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	myVertexArray.SetBuffer(vb, layout);
 
 	//Fill indexes
 	unsigned int maxTriangles = 2 * 6 * (length - 1) * (length - 1);
@@ -241,6 +235,5 @@ void SphereFractal::Divide()
 			}
 		}
 	}
-	myIndexBuffer = new IndexBuffer;
-	myIndexBuffer->SetBuffer(indexes.data(), indexesIndex);
+	myIndexBuffer.SetBuffer(indexes.data(), indexesIndex);
 }

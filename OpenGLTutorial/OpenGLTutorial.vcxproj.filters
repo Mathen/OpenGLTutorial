@@ -63,6 +63,18 @@
     <ClCompile Include="src\SphereFractal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GeometryInOut.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeviceMemoryManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Rainbow.shader" />
@@ -485,6 +497,7 @@
     </None>
     <None Include="res\shaders\Texture.shader" />
     <None Include="res\shaders\OutlineBlack.shader" />
+    <None Include="res\shaders\Standard.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Libraries\glm\detail\_features.hpp">
@@ -1388,6 +1401,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SphereFractal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GeometryInOut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GeometryData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DeviceMemoryManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

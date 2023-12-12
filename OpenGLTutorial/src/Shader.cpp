@@ -4,14 +4,34 @@ Shader::Shader(const std::string& filepath) : myFilepath(filepath), myRendererId
 {
     ShaderSource ss = ParseShader();
     myRendererId = CreateShader(ss.vertexSrc, ss.fragmentSrc);
-}
-Shader::Shader() : myRendererId(0)
-{
 
+    DeviceMemoryManager::GetInstance().AddShaderRef(myRendererId);
+}
+Shader::Shader(Shader& sh)
+{
+    DeviceMemoryManager::GetInstance().RemoveShaderRef(myRendererId);
+
+    myRendererId = sh.myRendererId;
+    myFilepath = sh.myFilepath;
+    myUniformLocCache = sh.myUniformLocCache;
+
+    DeviceMemoryManager::GetInstance().AddShaderRef(myRendererId);
+}
+Shader& Shader::operator=(const Shader& sh)
+{
+    DeviceMemoryManager::GetInstance().RemoveShaderRef(myRendererId);
+
+    myRendererId = sh.myRendererId;
+    myFilepath = sh.myFilepath;
+    myUniformLocCache = sh.myUniformLocCache;
+
+    DeviceMemoryManager::GetInstance().AddShaderRef(myRendererId);
+
+    return *this;
 }
 Shader::~Shader()
 {
-    GlCall(glDeleteProgram(myRendererId));
+    DeviceMemoryManager::GetInstance().RemoveShaderRef(myRendererId);
 }
 
 ShaderSource Shader::ParseShader()

@@ -1,5 +1,43 @@
 #include "Texture.h"
 
+Texture::Texture() :
+	myRendererId(0),
+	myFilepath(""),
+	myHeight(0),
+	myWidth(0),
+	myLocalBuffer(nullptr),
+	myBpp(0)
+{
+
+}
+Texture::Texture(Texture& tx)
+{
+	DeviceMemoryManager::GetInstance().RemoveTextureRef(myRendererId);
+
+	myRendererId = tx.myRendererId;
+	myFilepath = tx.myFilepath;
+	myHeight = tx.myHeight;
+	myWidth = tx.myWidth;
+	myLocalBuffer = tx.myLocalBuffer;
+	myBpp = tx.myBpp;
+
+	DeviceMemoryManager::GetInstance().AddTextureRef(myRendererId);
+}
+Texture& Texture::operator=(const Texture& tx)
+{
+	DeviceMemoryManager::GetInstance().RemoveTextureRef(myRendererId);
+
+	myRendererId = tx.myRendererId;
+	myFilepath = tx.myFilepath;
+	myHeight = tx.myHeight;
+	myWidth = tx.myWidth;
+	myLocalBuffer = tx.myLocalBuffer;
+	myBpp = tx.myBpp;
+
+	DeviceMemoryManager::GetInstance().AddTextureRef(myRendererId);
+
+	return *this;
+}
 Texture::Texture(const std::string& path) : 
 	myRendererId(0),
 	myFilepath(path), 
@@ -24,10 +62,12 @@ Texture::Texture(const std::string& path) :
 
 	if (myLocalBuffer)
 		stbi_image_free(myLocalBuffer);
+
+	DeviceMemoryManager::GetInstance().AddTextureRef(myRendererId);
 }
 Texture::~Texture()
 {
-	GlCall(glDeleteTextures(1, &myRendererId));
+	DeviceMemoryManager::GetInstance().RemoveTextureRef(myRendererId);
 }
 
 void Texture::Bind(unsigned int slot) const

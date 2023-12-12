@@ -12,6 +12,8 @@
 
 #include "Debug.h"
 
+#include "DeviceMemoryManager.h"
+
 struct ShaderSource
 {
 	std::string vertexSrc;
@@ -27,7 +29,9 @@ private:
 
 public:
 	Shader(const std::string& filepath);
-	Shader();
+	Shader(Shader& ib);
+	Shader& operator=(const Shader& ib);
+	Shader() : myRendererId(0) {}
 	~Shader();
 
 	void Bind() const;

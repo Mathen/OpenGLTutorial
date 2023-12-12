@@ -5,10 +5,31 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int sizeBytes) : mySizeByt
     GlCall(glGenBuffers(1, &myRendererId));
     GlCall(glBindBuffer(GL_ARRAY_BUFFER, myRendererId));
     GlCall(glBufferData(GL_ARRAY_BUFFER, sizeBytes, data, GL_STATIC_DRAW));
+
+    DeviceMemoryManager::GetInstance().AddVertexBuffRef(myRendererId);
+}
+VertexBuffer::VertexBuffer(VertexBuffer& vb)
+{
+    DeviceMemoryManager::GetInstance().RemoveVertexBuffRef(myRendererId);
+
+    myRendererId = vb.myRendererId;
+    mySizeBytes = vb.mySizeBytes;
+
+    DeviceMemoryManager::GetInstance().AddVertexBuffRef(myRendererId);
+}
+VertexBuffer& VertexBuffer::operator=(const VertexBuffer& vb)
+{
+    DeviceMemoryManager::GetInstance().RemoveVertexBuffRef(myRendererId);
+
+    myRendererId = vb.myRendererId;
+    mySizeBytes = vb.mySizeBytes;
+
+    DeviceMemoryManager::GetInstance().AddVertexBuffRef(myRendererId);
+    return *this;
 }
 VertexBuffer::~VertexBuffer()
 {
-    GlCall(glDeleteBuffers(1, &myRendererId));
+    DeviceMemoryManager::GetInstance().RemoveVertexBuffRef(myRendererId);
 }
 
 void VertexBuffer::Bind() const

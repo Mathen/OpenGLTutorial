@@ -5,7 +5,7 @@
 class TriangleFractal : public Fractal
 {
 public:
-	TriangleFractal(Shader* shader);
+	TriangleFractal(Shader& shader);
 
 	void Divide();
 };

@@ -68,7 +68,7 @@ private:
 	std::vector<Cube> cubes;
 
 public:
-	CubeFractal(Shader* shader);
+	CubeFractal(Shader& shader);
 
 	void Divide();
 };

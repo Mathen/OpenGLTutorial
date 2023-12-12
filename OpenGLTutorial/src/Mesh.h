@@ -6,6 +6,7 @@
 #include "VertexArray.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "GeometryData.h"
 
 /*
 Mesh contains:
@@ -18,24 +19,21 @@ Mesh contains:
 class Mesh
 {
 protected:
-	IndexBuffer* myIndexBuffer;
-	VertexArray* myVertexArray;
-	Shader* myShader;
+	IndexBuffer myIndexBuffer;
+	VertexArray myVertexArray;
+	Shader myShader;
 
 public:
-	Mesh(IndexBuffer* ib, Shader* shader, VertexArray* va) : myIndexBuffer(ib), myShader(shader), myVertexArray(va) {}
+	Mesh(IndexBuffer& ib, Shader& shader, VertexArray& va) : myIndexBuffer(ib), myShader(shader), myVertexArray(va) {}
+	Mesh(GeometryData& geoData, Shader& shader);
+
 	~Mesh();
 
 protected:
-	Mesh()
-	{
-		myIndexBuffer = new IndexBuffer();
-		myVertexArray = new VertexArray();
-		myShader = new Shader();
-	}
+	Mesh() {}
 
 public:
-	const IndexBuffer& GetIndexBuffer() const { return *myIndexBuffer; }
-	const Shader& GetShader() const { return *myShader; }
-	const VertexArray& GetVertexArray() const { return *myVertexArray; }
+	const IndexBuffer& GetIndexBuffer() const { return myIndexBuffer; }
+	const Shader& GetShader() const { return myShader; }
+	const VertexArray& GetVertexArray() const { return myVertexArray; }
 };

@@ -2,7 +2,7 @@
 
 float Cube::size{ 1.0f };
 
-CubeFractal::CubeFractal(Shader* shader)
+CubeFractal::CubeFractal(Shader& shader)
 {
 	myMaxDiv = 5;
 	myShader = shader;
@@ -12,16 +12,14 @@ CubeFractal::CubeFractal(Shader* shader)
 
 	std::vector<float> verticies;
 	cubes[0].AddVerticies(verticies);
-	VertexBuffer* vb = new VertexBuffer((void*)verticies.data(), verticies.size() * 4);
-	VertexBufferLayout* layout = new VertexBufferLayout;
-	layout->Push<float>(3);
-	myVertexArray = new VertexArray;
-	myVertexArray->AddBuffer(vb, layout);
+	VertexBuffer vb((void*)verticies.data(), verticies.size() * 4);
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	myVertexArray.SetBuffer(vb, layout);
 
 	std::vector<unsigned int> indexes;
 	cubes[0].AddIndexes(indexes, 0);
-	myIndexBuffer = new IndexBuffer;
-	myIndexBuffer->SetBuffer(indexes.data(), indexes.size());
+	myIndexBuffer.SetBuffer(indexes.data(), indexes.size());
 }
 
 void CubeFractal::Divide()
@@ -74,15 +72,10 @@ void CubeFractal::Divide()
 		cubes[i].AddIndexes(indexes, i * 8);
 	}
 
-	delete myVertexArray;
-	delete myIndexBuffer;
+	VertexBuffer vb((void*)verticies.data(), verticies.size() * 4);
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	myVertexArray.SetBuffer(vb, layout);
 
-	VertexBuffer* vb = new VertexBuffer((void*)verticies.data(), verticies.size() * 4);
-	VertexBufferLayout* layout = new VertexBufferLayout;
-	layout->Push<float>(3);
-	myVertexArray = new VertexArray;
-	myVertexArray->AddBuffer(vb, layout);
-
-	myIndexBuffer = new IndexBuffer;
-	myIndexBuffer->SetBuffer(indexes.data(), indexes.size());
+	myIndexBuffer.SetBuffer(indexes.data(), indexes.size());
 }

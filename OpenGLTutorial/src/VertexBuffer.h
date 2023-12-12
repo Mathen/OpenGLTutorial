@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 
 #include "Debug.h"
+#include "DeviceMemoryManager.h"
 
 class VertexBuffer
 {
@@ -12,6 +13,9 @@ private:
 
 public:
 	VertexBuffer(const void* data, unsigned int sizeBytes);
+	VertexBuffer(VertexBuffer& vb);
+	VertexBuffer& operator=(const VertexBuffer& vb);
+	VertexBuffer() : mySizeBytes(0), myRendererId(0) {}
 	~VertexBuffer();
 
 	void Bind() const;

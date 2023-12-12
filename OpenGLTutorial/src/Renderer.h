@@ -9,10 +9,14 @@
 #include "Shader.h"
 #include "Mesh.h"
 
+#include "GeometryData.h"
+
 class Renderer
 {
 public:
     Renderer();
+
+    void DrawMesh(const Mesh* mesh);
 
     void DrawTriangles(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
     void DrawTriangles(const Mesh& mesh) const;
